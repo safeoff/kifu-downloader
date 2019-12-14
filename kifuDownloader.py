@@ -16,7 +16,7 @@ def strip_warsbattletype(line):
 	match = re.search(r"<small>(.+)</small>", line)
 	#if match:
 	#	return match.group(1)
-	return match.group(1) if match else "戦法なし"
+	return match.group(1) if match else "#戦法なし"
 
 
 # 将棋ウォーズの棋譜URLにアクセスして、棋譜の行を抽出する
