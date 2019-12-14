@@ -1,6 +1,7 @@
 import urllib
 import urllib.request
 import re
+import os.path
 
 
 # HTMLの行から将棋ウォーズのURLを抽出
@@ -29,6 +30,21 @@ def get_kifuline(url):
 	return l[0].decode("utf-8")
 
 
+# まだダウンロードしていない棋譜を抽出
+def filter_newkifu(kifus, filename):
+	if not os.path.exists(filename):
+		return kifus
+
+	with open(filename, 'r') as f:
+		kifuurls = f.readlines()
+		newkifus = []
+		for kifu in kifus:
+			if kifu["kifuurl"] + "\n" not in kifuurls:
+				newkifus.append(kifu)
+
+	return newkifus
+
+
 # 将棋ウォーズの棋譜をダウンロードする
 # idは名前 gtは10分"", 3分"sb", 10秒"s1"
 def download_warskifu(id, gt):
@@ -44,14 +60,23 @@ def download_warskifu(id, gt):
 	lines = body.split("\n")
 	for i, line in enumerate(lines):
 		if "kif-pona.heroz.jp/games" in line:
-			kifu = strip_warsurl(line)
+			kifuurl = strip_warsurl(line)
 			battle_type = strip_warsbattletype(lines[i-3])
-			kifus.append({"kifu": kifu, "battle_type": battle_type})
+			kifus.append({"kifuurl": kifuurl, "battle_type": battle_type})
+
+	# まだダウンロードしていない棋譜を抽出
+	filename = "kifuurl.txt"
+	newkifus = filter_newkifu(kifus, filename)
 
 	# 将棋ウォーズの棋譜URLにアクセス
-	for i, _ in enumerate(kifus):
+	for i, _ in enumerate(newkifus):
 		# 棋譜を抽出
-		kifu = get_kifuline(kifus[i]["kifu"])
+		kifu = get_kifuline(kifus[i]["kifuurl"])
 		kifus[i]["kifu"] = kifu
 
-	return kifus
+	# ダウンロードした棋譜URLを登録
+	with open(filename, "a") as f:
+		for newkifu in newkifus:
+			f.write(newkifu["kifuurl"] + "\n")
+
+	return newkifus
