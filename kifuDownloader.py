@@ -71,7 +71,7 @@ def download_warskifu(id, gt):
 	# 将棋ウォーズの棋譜URLにアクセス
 	for i, _ in enumerate(newkifus):
 		# 棋譜を抽出
-		kifu = get_kifuline(kifus[i]["kifuurl"])
+		kifu = get_kifuline(newkifus[i]["kifuurl"])
 		newkifus[i]["kifu"] = kifu
 
 	# ダウンロードした棋譜URLを登録
