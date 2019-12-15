@@ -47,7 +47,7 @@ def filter_newkifu(kifus, filename):
 
 # 将棋ウォーズの棋譜をダウンロードする
 # idは名前 gtは10分"", 3分"sb", 10秒"s1"
-def download_warskifu(id, gt):
+def download_warskifu(id, gt, limit_num):
 
 	# 将棋ウォーズ 棋譜検索くんにアクセス
 	url = "https://shogi.pvs.jp/shogiwars/?ui=" + id + "&gt=" + gt + "&sb=off"
@@ -67,6 +67,10 @@ def download_warskifu(id, gt):
 	# まだダウンロードしていない棋譜を抽出
 	filename = "kifuurl.txt"
 	newkifus = filter_newkifu(kifus, filename)
+
+	# ダウンロード数を制限
+	if limit_num is not None:
+		newkifus = newkifus[:limit_num]
 
 	# 将棋ウォーズの棋譜URLにアクセス
 	for i, _ in enumerate(newkifus):
