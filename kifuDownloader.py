@@ -25,7 +25,7 @@ def get_kifuline(url):
 	with urllib.request.urlopen(req) as res:
 		body = res.readlines()
 	# 棋譜を抽出
-	l = [s for s in body if 'receiveMove' in str(s)]
+	l = [s for s in body if 'gameHash' in str(s)]
 
 	return l[0].decode("utf-8")
 

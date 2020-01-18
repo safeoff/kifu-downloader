@@ -12,8 +12,9 @@ class TestkifuDownloader(unittest.TestCase):
 		# arrange
 		id = "safeoff"
 		gt = ""
+		limit_num = 1
 		# act
-		result = kifuDownloader.download_warskifu(id, gt)
+		result = kifuDownloader.download_warskifu(id, gt, limit_num)
 
 		pprint.pprint(result)
 
